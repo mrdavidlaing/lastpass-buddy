@@ -1,6 +1,12 @@
 = sophia
 
-Describe your project here
+**sophia** captures context so it can be copied between teams
+
+### Install
+
+```
+gem install pivotal-sophia
+```
 
 :include:sophia.rdoc
 
