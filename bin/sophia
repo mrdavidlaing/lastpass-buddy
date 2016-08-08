@@ -1,0 +1,93 @@
+#!/usr/bin/env ruby
+require 'gli'
+require 'sophia'
+require 'tempfile'
+require 'highline/import'
+require 'mdless'
+
+include GLI::App
+
+program_desc 'sophia captures context so it can be copied between teams'
+
+version Sophia::VERSION
+
+subcommand_option_handling :normal
+arguments :strict
+
+desc 'Commands that interact with LastPass'
+command :lastpass do |c|
+
+		c.desc 'Pulls keys from your LastPass .ssh folder and ssh-add\'s them to your terminal session'
+		c.command :'ssh-add' do |add|
+			add.action do
+        `lpass ls ".ssh" --color=never`.split( /\r?\n/ ).each_with_index do | line, i |
+				  next if i==0 # First line is folder
+          key_name, key_id = line.match(/\.ssh\/(.+?) \[id: (\d+)\]/i).captures
+					next unless agree("Add #{key_name}?")
+          ssh_key = `lpass show #{key_id} --notes`
+					ssh_key_file = Tempfile.new(['',"-#{key_name}"])
+					begin
+						 ssh_key_file.write(ssh_key)
+						 ssh_key_file.close
+						 puts `ssh-add -t 32400 #{ssh_key_file.path}`
+					ensure
+						 ssh_key_file.unlink
+					end
+				end
+				say("<%= color('Current ssh-agent keys:', BOLD) %>")
+				puts `ssh-add -l`
+			end
+		end
+
+		c.desc 'Stores a ssh key in the .ssh folder within LastPass'
+		c.command :'store-ssh-key' do |store|
+			store.action do
+				say %{<%= color('HOWTO: Store a ssh key in LastPass', BOLD) %>
+1. Create a LastPass folder named <%= color('.ssh', BOLD) %>
+2. Add a Generic Secure Note to this folder where the Secure Note:
+   1.  <%= color('Name', BOLD) %> is a descriptive name of the SSH key
+   2.  <%= color('Body', BOLD) %> is the contents of your SSH private key
+3. Repeat to store multiple keys
+}
+			end
+		end
+end
+
+desc 'Commands related to Pivotal JumpBoxes'
+command :jumpbox do |c|
+	c.desc 'Generate a new SSH key for use on the jumpbox'
+	c.command :'generate-ssh-key' do |store|
+		store.action do
+			puts %{
+1. git clone git@github.com:pivotal-cf/prod-keys.git
+2. /path/to/prod-keys/scripts/create-key
+3. Store the private key somewhere safe ( eg, LastPass; then use sophia lastpass to fetch it)
+4. Commit the public portion of your key to the pivotal-cf/prod-keys repo
+5. Wait for the jumpboxes to roll
+}
+		end
+	end
+end
+
+pre do |global,command,options,args|
+  # Pre logic here
+  # Return true to proceed; false to abort and not call the
+  # chosen command
+  # Use skips_pre before a command to skip this block
+  # on that command only
+  true
+end
+
+post do |global,command,options,args|
+  # Post logic here
+  # Use skips_post before a command to skip this
+  # block on that command only
+end
+
+on_error do |exception|
+  # Error logic here
+  # return false to skip default error handling
+  true
+end
+
+exit run(ARGV)
