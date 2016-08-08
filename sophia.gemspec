@@ -21,5 +21,4 @@ spec = Gem::Specification.new do |s|
   s.add_development_dependency('aruba')
   s.add_runtime_dependency('gli','2.14.0')
   s.add_runtime_dependency('highline','~> 1.7')
-  s.add_runtime_dependency('mdless', '~> 0.0.9')
 end

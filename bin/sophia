@@ -3,7 +3,6 @@ require 'gli'
 require 'sophia'
 require 'tempfile'
 require 'highline/import'
-require 'mdless'
 
 include GLI::App
 
