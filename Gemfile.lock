@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    pivotal-sophia (0.0.1)
+    pivotal-lastpass-buddy (0.0.1)
       gli (= 2.14.0)
       highline (~> 1.7)
 
@@ -52,7 +52,7 @@ PLATFORMS
 
 DEPENDENCIES
   aruba
-  pivotal-sophia!
+  pivotal-lastpass-buddy!
   rake
   rdoc
 

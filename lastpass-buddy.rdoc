@@ -1,0 +1,5 @@
+= lastpass-buddy
+
+Generate this with
+    lastpass-buddy rdoc
+After you have described your command line interface

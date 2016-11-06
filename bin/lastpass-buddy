@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 require 'gli'
-require 'sophia'
+require 'lastpass-buddy'
 require 'tempfile'
 require 'highline/import'
 
 include GLI::App
 
-program_desc 'sophia captures context so it can be copied between teams'
+program_desc 'lastpass-buddy does useful things using lastpass as a backing store'
 
 version Sophia::VERSION
 
@@ -60,7 +60,7 @@ command :jumpbox do |c|
 			puts %{
 1. git clone git@github.com:pivotal-cf/prod-keys.git
 2. /path/to/prod-keys/scripts/create-key
-3. Store the private key somewhere safe ( eg, LastPass; then use sophia lastpass to fetch it)
+3. Store the private key somewhere safe ( eg, LastPass; then use lastpass-buddy lastpass to fetch it)
 4. Commit the public portion of your key to the pivotal-cf/prod-keys repo
 5. Wait for the jumpboxes to roll
 }

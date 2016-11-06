@@ -1,10 +1,10 @@
-= sophia
+= lastpass-buddy
 
-*sophia* captures context so it can be copied between teams
+*lastpass-buddy* does useful things using lastpass as a backing store
 
 === Install
 
-  gem install pivotal-sophia
+  gem install lastpass-buddy
 
-:include:sophia.rdoc
+:include:lastpass-buddy.rdoc
 
